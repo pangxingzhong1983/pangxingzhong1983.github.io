@@ -1,0 +1,4 @@
+/* 👹隐藏 AddToAny 多余的加号图标 */
+.a2a_dd {
+  display: none !important;
+}
