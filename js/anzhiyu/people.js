@@ -1,137 +1,91 @@
-"use strict";
-function _toConsumableArray(e) {
-  return _arrayWithoutHoles(e) || _iterableToArray(e) || _unsupportedIterableToArray(e) || _nonIterableSpread();
-}
+(function () {
+  if (window.__PEOPLE_CANVAS_LOADED__) return;
+  window.__PEOPLE_CANVAS_LOADED__ = true;
 
-function _nonIterableSpread() {
-  throw new TypeError(
-    "Invalid attempt to spread non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."
-  );
-}
+  "use strict";
 
-function _unsupportedIterableToArray(e, r) {
-  if (e) {
-    if ("string" == typeof e) return _arrayLikeToArray(e, r);
-    var t = Object.prototype.toString.call(e).slice(8, -1);
-    return (
-      "Object" === t && e.constructor && (t = e.constructor.name),
-      "Map" === t || "Set" === t
-        ? Array.from(e)
-        : "Arguments" === t || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(t)
-        ? _arrayLikeToArray(e, r)
-        : void 0
-    );
-  }
-}
-
-function _iterableToArray(e) {
-  if (("undefined" != typeof Symbol && null != e[Symbol.iterator]) || null != e["@@iterator"]) return Array.from(e);
-}
-
-function _arrayWithoutHoles(e) {
-  if (Array.isArray(e)) return _arrayLikeToArray(e);
-}
-
-function _arrayLikeToArray(e, r) {
-  (null == r || r > e.length) && (r = e.length);
-  for (var t = 0, a = new Array(r); t < r; t++) a[t] = e[t];
-  return a;
-}
-
-function _classCallCheck(e, r) {
-  if (!(e instanceof r)) throw new TypeError("Cannot call a class as a function");
-}
-
-function _defineProperties(e, r) {
-  for (var t = 0; t < r.length; t++) {
-    var a = r[t];
-    (a.enumerable = a.enumerable || !1),
-      (a.configurable = !0),
-      "value" in a && (a.writable = !0),
-      Object.defineProperty(e, a.key, a);
-  }
-}
-
-function _createClass(e, r, t) {
-  return r && _defineProperties(e.prototype, r), t && _defineProperties(e, t), e;
-}
-var peopleConfig = {
+  // 所有变量用 var 声明，避免重复声明错误
+  var peopleConfig = {
     src: GLOBAL_CONFIG.peoplecanvas.img,
     rows: 15,
     cols: 7,
-  },
-  randomRange = function (e, r) {
-    return e + Math.random() * (r - e);
-  },
-  randomIndex = function (e) {
-    return 0 | randomRange(0, e.length);
-  },
-  removeFromArray = function (e, r) {
-    return e.splice(r, 1)[0];
-  },
-  removeItemFromArray = function (e, r) {
-    return removeFromArray(e, e.indexOf(r));
-  },
-  removeRandomFromArray = function (e) {
-    return removeFromArray(e, randomIndex(e));
-  },
-  getRandomFromArray = function (e) {
-    return e[0 | randomIndex(e)];
-  },
-  resetPeep = function (e) {
-    var r,
-      t,
-      a = e.stage,
-      n = e.peep,
-      o = 0.5 < Math.random() ? 1 : -1,
-      i = 100 - 250 * gsap.parseEase("power2.in")(Math.random()),
-      s = a.height - n.height + i;
-    return (
-      1 == o ? ((r = -n.width), (t = a.width), (n.scaleX = 1)) : ((r = a.width + n.width), (t = 0), (n.scaleX = -1)),
-      (n.x = r),
-      (n.y = s),
-      {
-        startX: r,
-        startY: (n.anchorY = s),
-        endX: t,
-      }
-    );
-  },
-  normalWalk = function (e) {
-    var r = e.peep,
-      t = e.props,
-      a = (t.startX, t.startY),
-      n = t.endX,
-      o = gsap.timeline();
-    return (
-      o.timeScale(randomRange(0.5, 1.5)),
-      o.to(
-        r,
-        {
-          duration: 10,
-          x: n,
-          ease: "none",
-        },
-        0
-      ),
-      o.to(
-        r,
-        {
-          duration: 0.25,
-          repeat: 40,
-          yoyo: !0,
-          y: a - 10,
-        },
-        0
-      ),
-      o
-    );
-  },
-  walks = [normalWalk],
-  Peep = (function () {
+  };
+
+  var ctx, stage = { width: 0, height: 0 };
+  var allPeeps = [];
+  var availablePeeps = [];
+  var crowd = [];
+
+  function _toConsumableArray(e) {
+    return _arrayWithoutHoles(e) || _iterableToArray(e) || _unsupportedIterableToArray(e) || _nonIterableSpread();
+  }
+  function _nonIterableSpread() {
+    throw new TypeError("Invalid attempt to spread non-iterable instance.");
+  }
+  function _unsupportedIterableToArray(e, r) {
+    if (e) {
+      if ("string" == typeof e) return _arrayLikeToArray(e, r);
+      var t = Object.prototype.toString.call(e).slice(8, -1);
+      return (
+        "Object" === t && e.constructor && (t = e.constructor.name),
+        "Map" === t || "Set" === t
+          ? Array.from(e)
+          : "Arguments" === t || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(t)
+          ? _arrayLikeToArray(e, r)
+          : void 0
+      );
+    }
+  }
+  function _iterableToArray(e) {
+    if (("undefined" != typeof Symbol && null != e[Symbol.iterator]) || null != e["@@iterator"]) return Array.from(e);
+  }
+  function _arrayWithoutHoles(e) {
+    if (Array.isArray(e)) return _arrayLikeToArray(e);
+  }
+  function _arrayLikeToArray(e, r) {
+    (null == r || r > e.length) && (r = e.length);
+    for (var t = 0, a = new Array(r); t < r; t++) a[t] = e[t];
+    return a;
+  }
+  function _classCallCheck(e, r) {
+    if (!(e instanceof r)) throw new TypeError("Cannot call a class as a function");
+  }
+  function _defineProperties(e, r) {
+    for (var t = 0; t < r.length; t++) {
+      var a = r[t];
+      (a.enumerable = a.enumerable || !1),
+        (a.configurable = !0),
+        "value" in a && (a.writable = !0),
+        Object.defineProperty(e, a.key, a);
+    }
+  }
+  function _createClass(e, r, t) {
+    return r && _defineProperties(e.prototype, r), t && _defineProperties(e, t), e;
+  }
+
+  // 工具函数
+  var randomRange = function (min, max) {
+    return min + Math.random() * (max - min);
+  };
+  var randomIndex = function (arr) {
+    return 0 | randomRange(0, arr.length);
+  };
+  var removeFromArray = function (arr, i) {
+    return arr.splice(i, 1)[0];
+  };
+  var removeItemFromArray = function (arr, item) {
+    return removeFromArray(arr, arr.indexOf(item));
+  };
+  var removeRandomFromArray = function (arr) {
+    return removeFromArray(arr, randomIndex(arr));
+  };
+  var getRandomFromArray = function (arr) {
+    return arr[randomIndex(arr)];
+  };
+
+  var Peep = (function () {
     function a(e) {
-      var r = e.image,
-        t = e.rect;
+      var r = e.image, t = e.rect;
       _classCallCheck(this, a),
         (this.image = r),
         this.setRect(t),
@@ -141,131 +95,168 @@ var peopleConfig = {
         (this.scaleX = 1),
         (this.walk = null);
     }
-    return (
-      _createClass(a, [
-        {
-          key: "setRect",
-          value: function (e) {
-            (this.rect = e),
-              (this.width = e[2]),
-              (this.height = e[3]),
-              (this.drawArgs = [this.image].concat(_toConsumableArray(e), [0, 0, this.width, this.height]));
-          },
-        },
-        {
-          key: "render",
-          value: function (e) {
-            e.save(),
-              e.translate(this.x, this.y),
-              e.scale(this.scaleX, 1),
-              e.drawImage.apply(e, _toConsumableArray(this.drawArgs)),
-              e.restore();
-          },
-        },
-      ]),
-      a
-    );
-  })(),
-  img = document.createElement("img");
-(img.onload = init), (img.src = peopleConfig.src);
-let peoplecanvasEl = document.getElementById("peoplecanvas");
+    return _createClass(a, [
+      {
+        key: "setRect",
+        value: function (e) {
+          this.rect = e;
+          this.width = e[2];
+          this.height = e[3];
+          this.drawArgs = [this.image].concat(_toConsumableArray(e), [0, 0, this.width, this.height]);
+        }
+      },
+      {
+        key: "render",
+        value: function (e) {
+          e.save();
+          e.translate(this.x, this.y);
+          e.scale(this.scaleX, 1);
+          e.drawImage.apply(e, _toConsumableArray(this.drawArgs));
+          e.restore();
+        }
+      }
+    ]), a;
+  })();
 
-let ctx = peoplecanvasEl ? peoplecanvasEl.getContext("2d") : undefined,
-  stage = {
-    width: 0,
-    height: 0,
-  },
-  allPeeps = [],
-  availablePeeps = [],
-  crowd = [];
+  var img = document.createElement("img");
+  img.onload = init;
+  img.src = peopleConfig.src;
 
-function init() {
-  if (!peoplecanvasEl) return;
-  createPeeps(), resize(), gsap.ticker.add(render), window.addEventListener("resize", resize);
-}
-document.addEventListener("pjax:success", e => {
-  peoplecanvasEl = document.getElementById("peoplecanvas");
-  if (peoplecanvasEl) {
-    (ctx = peoplecanvasEl ? peoplecanvasEl.getContext("2d") : undefined), window.removeEventListener("resize", resize);
-    gsap.ticker.remove(render);
-    setTimeout(() => {
-      if (!peoplecanvasEl) return;
-      resize(), gsap.ticker.add(render), window.addEventListener("resize", resize);
-    }, 300);
+  window.peoplecanvasEl = document.getElementById("peoplecanvas");
+  if (window.peoplecanvasEl) {
+    ctx = window.peoplecanvasEl.getContext("2d");
   }
-});
 
-function createPeeps() {
-  for (
-    var e = peopleConfig.rows,
-      r = peopleConfig.cols,
-      t = e * r,
-      a = img.naturalWidth / e,
-      n = img.naturalHeight / r,
-      o = 0;
-    o < t;
-    o++
-  )
-    allPeeps.push(
-      new Peep({
-        image: img,
-        rect: [(o % e) * a, ((o / e) | 0) * n, a, n],
-      })
-    );
-}
+  function init() {
+    if (!peoplecanvasEl) return;
+    createPeeps();
+    resize();
+    gsap.ticker.add(render);
+    window.addEventListener("resize", resize);
+  }
 
-function resize() {
-  if (peoplecanvasEl && peoplecanvasEl.clientWidth != 0) {
-    (stage.width = peoplecanvasEl.clientWidth),
-      (stage.height = peoplecanvasEl.clientHeight),
-      (peoplecanvasEl.width = stage.width * devicePixelRatio),
-      (peoplecanvasEl.height = stage.height * devicePixelRatio),
-      crowd.forEach(function (e) {
-        e.walk.kill();
-      }),
-      (crowd.length = 0),
-      (availablePeeps.length = 0),
-      availablePeeps.push.apply(availablePeeps, allPeeps),
+  document.addEventListener("pjax:success", () => {
+    window.peoplecanvasEl = document.getElementById("peoplecanvas");
+    if (peoplecanvasEl) {
+      ctx = peoplecanvasEl.getContext("2d");
+      window.removeEventListener("resize", resize);
+      gsap.ticker.remove(render);
+      setTimeout(() => {
+        if (!peoplecanvasEl) return;
+        resize();
+        gsap.ticker.add(render);
+        window.addEventListener("resize", resize);
+      }, 300);
+    }
+  });
+
+  function createPeeps() {
+    var rows = peopleConfig.rows;
+    var cols = peopleConfig.cols;
+    var count = rows * cols;
+    var cellWidth = img.naturalWidth / rows;
+    var cellHeight = img.naturalHeight / cols;
+
+    for (var i = 0; i < count; i++) {
+      allPeeps.push(
+        new Peep({
+          image: img,
+          rect: [(i % rows) * cellWidth, ((i / rows) | 0) * cellHeight, cellWidth, cellHeight],
+        })
+      );
+    }
+  }
+
+  function resetPeep(e) {
+    var peep = e.peep;
+    var direction = Math.random() > 0.5 ? 1 : -1;
+    var offsetY = 100 - 250 * gsap.parseEase("power2.in")(Math.random());
+    var y = stage.height - peep.height + offsetY;
+    var startX, endX;
+    if (direction === 1) {
+      startX = -peep.width;
+      endX = stage.width;
+      peep.scaleX = 1;
+    } else {
+      startX = stage.width + peep.width;
+      endX = 0;
+      peep.scaleX = -1;
+    }
+    peep.x = startX;
+    peep.y = y;
+
+    return {
+      startX,
+      startY: (peep.anchorY = y),
+      endX,
+    };
+  }
+
+  function normalWalk(e) {
+    var peep = e.peep;
+    var props = e.props;
+    var y = props.startY;
+    var x = props.endX;
+
+    var timeline = gsap.timeline();
+    timeline.timeScale(randomRange(0.5, 1.5));
+    timeline.to(peep, { duration: 10, x: x, ease: "none" }, 0);
+    timeline.to(peep, { duration: 0.25, repeat: 40, yoyo: true, y: y - 10 }, 0);
+
+    return timeline;
+  }
+
+  var walks = [normalWalk];
+
+  function resize() {
+    if (peoplecanvasEl && peoplecanvasEl.clientWidth !== 0) {
+      stage.width = peoplecanvasEl.clientWidth;
+      stage.height = peoplecanvasEl.clientHeight;
+      peoplecanvasEl.width = stage.width * devicePixelRatio;
+      peoplecanvasEl.height = stage.height * devicePixelRatio;
+
+      crowd.forEach((p) => p.walk.kill());
+      crowd.length = 0;
+      availablePeeps.length = 0;
+      availablePeeps.push(...allPeeps);
+
       initCrowd();
+    }
   }
-}
 
-function initCrowd() {
-  for (; availablePeeps.length; ) addPeepToCrowd().walk.progress(Math.random());
-}
+  function initCrowd() {
+    while (availablePeeps.length) {
+      addPeepToCrowd().walk.progress(Math.random());
+    }
+  }
 
-function addPeepToCrowd() {
-  var e = removeRandomFromArray(availablePeeps),
-    r = getRandomFromArray(walks)({
-      peep: e,
-      props: resetPeep({
-        peep: e,
-        stage: stage,
-      }),
-    }).eventCallback("onComplete", function () {
-      removePeepFromCrowd(e), addPeepToCrowd();
+  function addPeepToCrowd() {
+    var peep = removeRandomFromArray(availablePeeps);
+    var walk = getRandomFromArray(walks)({
+      peep: peep,
+      props: resetPeep({ peep: peep, stage: stage }),
+    }).eventCallback("onComplete", () => {
+      removePeepFromCrowd(peep);
+      addPeepToCrowd();
     });
-  return (
-    (e.walk = r),
-    crowd.push(e),
-    crowd.sort(function (e, r) {
-      return e.anchorY - r.anchorY;
-    }),
-    e
-  );
-}
 
-function removePeepFromCrowd(e) {
-  removeItemFromArray(crowd, e), availablePeeps.push(e);
-}
+    peep.walk = walk;
+    crowd.push(peep);
+    crowd.sort((a, b) => a.anchorY - b.anchorY);
+    return peep;
+  }
 
-function render() {
-  if (!peoplecanvasEl) return;
-  (peoplecanvasEl.width = peoplecanvasEl.width),
-    ctx.save(),
-    ctx.scale(devicePixelRatio, devicePixelRatio),
-    crowd.forEach(function (e) {
-      e.render(ctx);
-    }),
+  function removePeepFromCrowd(peep) {
+    removeItemFromArray(crowd, peep);
+    availablePeeps.push(peep);
+  }
+
+  function render() {
+    if (!peoplecanvasEl || !ctx) return;
+    peoplecanvasEl.width = stage.width * devicePixelRatio;
+    ctx.save();
+    ctx.scale(devicePixelRatio, devicePixelRatio);
+    crowd.forEach((peep) => peep.render(ctx));
     ctx.restore();
-}
+  }
+})();
