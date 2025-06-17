@@ -6,7 +6,7 @@
   <link href="https://blog.zongyunti.dns.army/atom.xml" rel="self"/>
   
   <link href="https://blog.zongyunti.dns.army/"/>
-  <updated>2025-06-14T08:21:12.931Z</updated>
+  <updated>2025-06-16T18:30:18.541Z</updated>
   <id>https://blog.zongyunti.dns.army/</id>
   
   <author>
@@ -21,9 +21,9 @@
     <link href="https://blog.zongyunti.dns.army/2025/06/14/%E8%BF%99%E6%98%AF%E4%B8%80%E7%AF%87%E7%BA%B5%E4%BA%91%E6%A2%AF%E7%9A%84%E5%8D%9A%E6%96%87/"/>
     <id>https://blog.zongyunti.dns.army/2025/06/14/%E8%BF%99%E6%98%AF%E4%B8%80%E7%AF%87%E7%BA%B5%E4%BA%91%E6%A2%AF%E7%9A%84%E5%8D%9A%E6%96%87/</id>
     <published>2025-06-14T08:00:07.000Z</published>
-    <updated>2025-06-14T08:21:12.931Z</updated>
+    <updated>2025-06-16T18:30:18.541Z</updated>
     
-    <content type="html"><![CDATA[<div class="video-container">[up主专用，视频内嵌代码贴在这]</div><style>.video-container {    position: relative;    width: 100%;    padding-top: 56.25%; /* 16:9 aspect ratio (height/width = 9/16 * 100%) */}.video-container iframe {    position: absolute;    top: 0;    left: 0;    width: 100%;    height: 100%;}</style>]]></content>
+    <content type="html"><![CDATA[<div class="video-container">[up主专用，视频内嵌代码贴在这]</div><style>.video-container {    position: relative;    width: 100%;    padding-top: 56.25%; /* 16:9 aspect ratio (height/width = 9/16 * 100%) */}.video-container iframe {    position: absolute;    top: 0;    left: 0;    width: 100%;    height: 100%;}</style><div class="fj-gallery url">[  {    "url": "/images/test1.jpg",    "alt": "测试图1",    "title": "点击放大",    "address": "相册A"  },  {    "url": "/images/test2.jpg",    "alt": "测试图2",    "title": "点击放大",    "address": "相册A"  }]</div>]]></content>
     
     
       
