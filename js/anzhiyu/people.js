@@ -1,3 +1,8 @@
+function init() {
+  if (window.__peep_initialized) return;
+  window.__peep_initialized = true;
+  // ...其余逻辑
+}
 (function () {
   if (window.__PEOPLE_CANVAS_LOADED__) return;
   window.__PEOPLE_CANVAS_LOADED__ = true;
@@ -141,6 +146,10 @@
       ctx = peoplecanvasEl.getContext("2d");
       window.removeEventListener("resize", resize);
       gsap.ticker.remove(render);
+
+      // ✅ 在这里添加 ↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓
+      window.__peep_initialized = false;
+
       setTimeout(() => {
         if (!peoplecanvasEl) return;
         resize();
